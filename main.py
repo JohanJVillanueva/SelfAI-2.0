@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import streamlit as st
 import pyttsx3
+import pyautogui
 import time
 
 mp_drawing = mp.solutions.drawing_utils
@@ -70,20 +71,23 @@ def main():
                         # Count the number of raised fingers
                         fingers_count = count_fingers(hand_landmarks)
                         
-                        # Display the number of raised fingers and add text-to-speech
-                        if fingers_count in [1, 2, 3]:
+                        # Display the number of raised fingers and add text-to-speech and pyautogui
+                        if fingers_count in [1, 2, 3,4,5]:
                             font_scale = 5 if fingers_count == 1 else 2
                             cv2.putText(image, str(fingers_count), (100, 200), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), 10, cv2.LINE_AA)
                             
-                            if fingers_count == 1:
+                            if fingers_count == 1 or fingers_count == 2:
+                                print("1 Detected")
                                 text_to_speech("Taking photo in 3 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("3")
                                 text_to_speech("2")
                                 text_to_speech("1")
                                 text_to_speech("Photo Done")
+                                pyautogui.click()
                                 
-                            elif fingers_count == 2:
+                            elif fingers_count == 3 or fingers_count == 4:
+                                print("3 Detected")
                                 text_to_speech("Taking photo in 5 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("5")
@@ -92,7 +96,10 @@ def main():
                                 text_to_speech("2")
                                 text_to_speech("1")
                                 text_to_speech("Photo Done")
-                            elif fingers_count == 3:
+                                pyautogui.click()
+                                
+                            elif fingers_count == 5:
+                                print("5 Detected")
                                 text_to_speech("Taking photo in 10 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("10")
@@ -106,6 +113,7 @@ def main():
                                 text_to_speech("2")
                                 text_to_speech("1")
                                 text_to_speech("Photo Done")
+                                pyautogui.click()
                 
                 stframe.image(image, channels='BGR')
                 
