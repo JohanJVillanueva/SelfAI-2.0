@@ -19,7 +19,7 @@ st.markdown(original_title, unsafe_allow_html=True)
 background_image = """
 <style>
 [data-testid="stAppViewContainer"] > .main {
-    background-image: url("https://raw.githubusercontent.com/JohanJVillanueva/SelfAI-2.0/refs/heads/main/bg2.jpg");
+    background-image: url("https://raw.githubusercontent.com/JohanJVillanueva/SelfAI-2.0/refs/heads/main/bg3.jpg");
     background-size: cover;  # This sets the size to cover 100% of the viewport width and height
     background-position: center;  
     background-repeat: no-repeat;
