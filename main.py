@@ -9,7 +9,11 @@ mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
 st.sidebar.image("logo.png", use_column_width=True)
-#st.image("logo.png", use_column_width=True)
+#st.image("logo.png", width=400)
+
+logo = "logo.png"
+col1, col2, col3 = st.columns(3)
+col2.image(logo, width=250)
 
 original_title = '<h4 style="font-family: sans-serif; color:White; font-size: 20px; text-shadow: 2px 2px 4px #000000;">Please pick your lighting style: </h4>'
 st.markdown(original_title, unsafe_allow_html=True)
@@ -166,7 +170,7 @@ def main():
                                 image_placeholder.empty() 
                                 
                 
-                stframe.image(image, channels='BGR')
+                stframe.image(image, channels='BGR',)
                 
                 if cv2.waitKey(5) & 0xFF == 27:
                     break
