@@ -8,6 +8,9 @@ import time
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
+st.sidebar.image("logo.png", use_column_width=True)
+st.image("logo.png", use_column_width=True)
+
 
 def count_fingers(hand_landmarks):
     finger_tips_ids = [4, 8, 12, 16, 20]
@@ -34,7 +37,6 @@ def text_to_speech(message):
     engine.runAndWait()
 
 def main():
-    st.title("SelfAI V2.0")
     
     st.sidebar.title("Settings")
     max_num_hands = st.sidebar.slider('Max number of hands:', 1, 4, 2, 1)
@@ -44,17 +46,17 @@ def main():
     
     # Adding buttons to print "hello1" to "hello4" in the terminal
     left, middle, right = st.columns(3)
-    if left.button("Double Bounce Lighting", use_container_width=True):
+    if left.button("💡Double Bounce Lighting", use_container_width=True):
         print("hello1")
         text_to_speech("Setting up Double Bounce Lighting, Please wait for the lights to turn on")
         run = True
         
-    if middle.button("Rembrandt Lighting", use_container_width=True):
+    if middle.button("💡 Rembrandt Lighting", use_container_width=True):
         print("hello2")
         text_to_speech("Setting up Double Remrandt Lighting, Please wait for the lights to turn on")
         run = True
 
-    if right.button("Back Lighting", use_container_width=True):
+    if right.button("💡 Back Lighting", use_container_width=True):
         print("hello3")
         text_to_speech("Setting up Back Lighting, Please wait for the lights to turn on")
         run = True
