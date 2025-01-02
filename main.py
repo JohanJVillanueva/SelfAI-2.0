@@ -90,7 +90,7 @@ def main():
         
         with mp_hands.Hands(
             max_num_hands=max_num_hands,
-            min_detection_confidence=min_detection_confidence) as hands:
+            min_detection_confidence=.9) as hands:
             
             while cap.isOpened():
                 success, image = cap.read()
@@ -115,59 +115,63 @@ def main():
                         fingers_count = count_fingers(hand_landmarks)
                         
                         # Display the number of raised fingers and add text-to-speech and pyautogui
-                        if fingers_count in [1, 2, 3,4,5]:
+                        if fingers_count in [1, 2, 3,4,5,6,7,8,9,10]:
                             font_scale = 5 if fingers_count == 1 else 2
                             cv2.putText(image, str(fingers_count), (100, 200), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), 10, cv2.LINE_AA)
                             
-                            if fingers_count == 1 or fingers_count == 2:
-                                print("1 Detected")
-                                image_placeholder.image("LOOK.png") 
-                                text_to_speech("Taking photo in 3 seconds")
-                                text_to_speech("Please look at the Lens")
-                                text_to_speech("3")
-                                text_to_speech("2")
-                                text_to_speech("1")
-                                pyautogui.click()
-                                st.toast('Photo Done!', icon='📸')
-                                text_to_speech("Photo Done")
-                                image_placeholder.empty() 
+                            #if fingers_count == 3: #or fingers_count == 2:
+                            #    print("1 Detected")
+                            #    image_placeholder.image("LOOK.png") 
+                            #    text_to_speech("Taking photo in 3 seconds")
+                            #    text_to_speech("Please look at the Lens")
+                            #    text_to_speech("3")
+                            #    text_to_speech("2")
+                            #    text_to_speech("1")
+                            #    pyautogui.click()
+                            #    time.sleep(1)
+                            #    st.toast('Photo Done!', icon='📸')
+                            #    text_to_speech("Photo Done")
+                            #    image_placeholder.empty() 
+                            #    time.sleep(2)
                                 
+                            #if fingers_count == 5:
+                            #    print("3 Detected")
+                            #    image_placeholder.image("LOOK.png") 
+                            #    text_to_speech("Taking photo in 5 seconds")
+                            #    text_to_speech("Please look at the Lens")
+                            #    text_to_speech("5")
+                            #    text_to_speech("4")
+                            #    text_to_speech("3")
+                            #    text_to_speech("2")
+                            #    text_to_speech("1")
+                            #    pyautogui.click()
+                            #    st.toast('Photo Done!', icon='📸')
+                            #    time.sleep(1)
+                            #    text_to_speech("Photo Done")
+                            #    image_placeholder.empty() 
+                            #    time.sleep(2)
                                 
-                            elif fingers_count == 3 or fingers_count == 4:
-                                print("3 Detected")
-                                image_placeholder.image("LOOK.png") 
-                                text_to_speech("Taking photo in 5 seconds")
-                                text_to_speech("Please look at the Lens")
-                                text_to_speech("5")
-                                text_to_speech("4")
-                                text_to_speech("3")
-                                text_to_speech("2")
-                                text_to_speech("1")
-                                pyautogui.click()
-                                st.toast('Photo Done!', icon='📸')
-                                text_to_speech("Photo Done")
-                                image_placeholder.empty() 
-                                
-                                
-                            elif fingers_count == 5:
-                                print("5 Detected") 
-                                image_placeholder.image("LOOK.png") 
-                                text_to_speech("Taking photo in 10 seconds")
-                                text_to_speech("Please look at the Lens")
-                                text_to_speech("10")
-                                text_to_speech("9")
-                                text_to_speech("8")
-                                text_to_speech("7")
-                                text_to_speech("6")
-                                text_to_speech("5")
-                                text_to_speech("4")
-                                text_to_speech("3")
-                                text_to_speech("2")
-                                text_to_speech("1")
-                                pyautogui.click()
-                                st.toast('Photo Done!', icon='📸')
-                                text_to_speech("Photo Done")
-                                image_placeholder.empty() 
+                            #elif fingers_count == 5:
+                            #    print("5 Detected") 
+                            #    image_placeholder.image("LOOK.png") 
+                            #    text_to_speech("Taking photo in 10 seconds")
+                            #    text_to_speech("Please look at the Lens")
+                            #    text_to_speech("10")
+                            #    text_to_speech("9")
+                            #    text_to_speech("8")
+                            #    text_to_speech("7")
+                            #    text_to_speech("6")
+                            #    text_to_speech("5")
+                            #    text_to_speech("4")
+                            #    text_to_speech("3")
+                            #    text_to_speech("2")
+                            #    text_to_speech("1")
+                            #    pyautogui.click()
+                            #    st.toast('Photo Done!', icon='📸')
+                            #    time.sleep(1)
+                            #    text_to_speech("Photo Done")
+                            #    time.sleep(1)
+                            #    image_placeholder.empty() 
                                 
                 
                 stframe.image(image, channels='BGR',)
