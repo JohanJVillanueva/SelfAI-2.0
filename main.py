@@ -9,9 +9,9 @@ mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
 st.sidebar.image("logo.png", use_column_width=True)
-st.image("logo.png", use_column_width=True)
+#st.image("logo.png", use_column_width=True)
 
-original_title = '<h1 style="font-family: serif; color:white; font-size: 20px;">Streamlit CSS Styling✨ </h1>'
+original_title = '<h4 style="font-family: sans-serif; color:White; font-size: 20px; text-shadow: 2px 2px 4px #000000;">Please pick your lighting style: </h4>'
 st.markdown(original_title, unsafe_allow_html=True)
 
 
@@ -19,8 +19,8 @@ st.markdown(original_title, unsafe_allow_html=True)
 background_image = """
 <style>
 [data-testid="stAppViewContainer"] > .main {
-    background-image: url("bg.png");
-    background-size: 100vw 100vh;  # This sets the size to cover 100% of the viewport width and height
+    background-image: url("https://raw.githubusercontent.com/JohanJVillanueva/SelfAI-2.0/refs/heads/main/bg2.jpg");
+    background-size: cover;  # This sets the size to cover 100% of the viewport width and height
     background-position: center;  
     background-repeat: no-repeat;
 }
@@ -117,7 +117,7 @@ def main():
                             if fingers_count == 1 or fingers_count == 2:
                                 print("1 Detected")
                                 image_placeholder = st.empty() 
-                                image_placeholder.image("LOOK.jpg") 
+                                image_placeholder.image("LOOK.png") 
                                 text_to_speech("Taking photo in 3 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("3")
@@ -131,7 +131,7 @@ def main():
                             elif fingers_count == 3 or fingers_count == 4:
                                 print("3 Detected")
                                 image_placeholder = st.empty() 
-                                image_placeholder.image("LOOK.jpg") 
+                                image_placeholder.image("LOOK.png") 
                                 text_to_speech("Taking photo in 5 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("5")
@@ -147,7 +147,7 @@ def main():
                             elif fingers_count == 5:
                                 print("5 Detected")
                                 image_placeholder = st.empty() 
-                                image_placeholder.image("LOOK.jpg") 
+                                image_placeholder.image("LOOK.png") 
                                 text_to_speech("Taking photo in 10 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("10")
