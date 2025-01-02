@@ -8,6 +8,7 @@ import time
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
+
 def count_fingers(hand_landmarks):
     finger_tips_ids = [4, 8, 12, 16, 20]
     fingers = []
@@ -45,14 +46,17 @@ def main():
     left, middle, right = st.columns(3)
     if left.button("Double Bounce Lighting", use_container_width=True):
         print("hello1")
+        text_to_speech("Setting up Double Bounce Lighting, Please wait for the lights to turn on")
         run = True
         
     if middle.button("Rembrandt Lighting", use_container_width=True):
         print("hello2")
+        text_to_speech("Setting up Double Remrandt Lighting, Please wait for the lights to turn on")
         run = True
 
     if right.button("Back Lighting", use_container_width=True):
         print("hello3")
+        text_to_speech("Setting up Back Lighting, Please wait for the lights to turn on")
         run = True
 
 
@@ -93,16 +97,22 @@ def main():
                             
                             if fingers_count == 1 or fingers_count == 2:
                                 print("1 Detected")
+                                image_placeholder = st.empty() 
+                                image_placeholder.image("LOOK.jpg") 
                                 text_to_speech("Taking photo in 3 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("3")
                                 text_to_speech("2")
                                 text_to_speech("1")
-                                text_to_speech("Photo Done")
                                 pyautogui.click()
+                                text_to_speech("Photo Done")
+                                image_placeholder.empty() 
+                                
                                 
                             elif fingers_count == 3 or fingers_count == 4:
                                 print("3 Detected")
+                                image_placeholder = st.empty() 
+                                image_placeholder.image("LOOK.jpg") 
                                 text_to_speech("Taking photo in 5 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("5")
@@ -110,11 +120,15 @@ def main():
                                 text_to_speech("3")
                                 text_to_speech("2")
                                 text_to_speech("1")
-                                text_to_speech("Photo Done")
                                 pyautogui.click()
+                                text_to_speech("Photo Done")
+                                image_placeholder.empty() 
+                                
                                 
                             elif fingers_count == 5:
                                 print("5 Detected")
+                                image_placeholder = st.empty() 
+                                image_placeholder.image("LOOK.jpg") 
                                 text_to_speech("Taking photo in 10 seconds")
                                 text_to_speech("Please look at the Lens")
                                 text_to_speech("10")
@@ -127,8 +141,10 @@ def main():
                                 text_to_speech("3")
                                 text_to_speech("2")
                                 text_to_speech("1")
-                                text_to_speech("Photo Done")
                                 pyautogui.click()
+                                text_to_speech("Photo Done")
+                                image_placeholder.empty() 
+                                
                 
                 stframe.image(image, channels='BGR')
                 
