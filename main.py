@@ -11,6 +11,23 @@ mp_hands = mp.solutions.hands
 st.sidebar.image("logo.png", use_column_width=True)
 st.image("logo.png", use_column_width=True)
 
+original_title = '<h1 style="font-family: serif; color:white; font-size: 20px;">Streamlit CSS Styling✨ </h1>'
+st.markdown(original_title, unsafe_allow_html=True)
+
+
+# Set the background image
+background_image = """
+<style>
+[data-testid="stAppViewContainer"] > .main {
+    background-image: url("bg.png");
+    background-size: 100vw 100vh;  # This sets the size to cover 100% of the viewport width and height
+    background-position: center;  
+    background-repeat: no-repeat;
+}
+</style>
+"""
+
+st.markdown(background_image, unsafe_allow_html=True)
 
 def count_fingers(hand_landmarks):
     finger_tips_ids = [4, 8, 12, 16, 20]
