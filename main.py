@@ -77,7 +77,8 @@ def main():
         print("hello3")
         text_to_speech("Setting up Back Lighting, Please wait for the lights to turn on")
         run = True
-
+    
+    image_placeholder = st.empty()
 
     if run:
         cap = cv2.VideoCapture(0)
@@ -116,7 +117,6 @@ def main():
                             
                             if fingers_count == 1 or fingers_count == 2:
                                 print("1 Detected")
-                                image_placeholder = st.empty() 
                                 image_placeholder.image("LOOK.png") 
                                 text_to_speech("Taking photo in 3 seconds")
                                 text_to_speech("Please look at the Lens")
@@ -124,13 +124,13 @@ def main():
                                 text_to_speech("2")
                                 text_to_speech("1")
                                 pyautogui.click()
+                                st.toast('Photo Done!', icon='📸')
                                 text_to_speech("Photo Done")
                                 image_placeholder.empty() 
                                 
                                 
                             elif fingers_count == 3 or fingers_count == 4:
                                 print("3 Detected")
-                                image_placeholder = st.empty() 
                                 image_placeholder.image("LOOK.png") 
                                 text_to_speech("Taking photo in 5 seconds")
                                 text_to_speech("Please look at the Lens")
@@ -140,13 +140,13 @@ def main():
                                 text_to_speech("2")
                                 text_to_speech("1")
                                 pyautogui.click()
+                                st.toast('Photo Done!', icon='📸')
                                 text_to_speech("Photo Done")
                                 image_placeholder.empty() 
                                 
                                 
                             elif fingers_count == 5:
-                                print("5 Detected")
-                                image_placeholder = st.empty() 
+                                print("5 Detected") 
                                 image_placeholder.image("LOOK.png") 
                                 text_to_speech("Taking photo in 10 seconds")
                                 text_to_speech("Please look at the Lens")
@@ -161,6 +161,7 @@ def main():
                                 text_to_speech("2")
                                 text_to_speech("1")
                                 pyautogui.click()
+                                st.toast('Photo Done!', icon='📸')
                                 text_to_speech("Photo Done")
                                 image_placeholder.empty() 
                                 
