@@ -33,7 +33,7 @@ def text_to_speech(message):
     engine.runAndWait()
 
 def main():
-    st.title("Real-Time Hand Detection and Finger Counting Using MediaPipe")
+    st.title("SelfAI V2.0")
     
     st.sidebar.title("Settings")
     max_num_hands = st.sidebar.slider('Max number of hands:', 1, 4, 2, 1)
@@ -41,6 +41,21 @@ def main():
     
     run = st.sidebar.button('Start Hand Tracking')
     
+    # Adding buttons to print "hello1" to "hello4" in the terminal
+    left, middle, right = st.columns(3)
+    if left.button("Double Bounce Lighting", use_container_width=True):
+        print("hello1")
+        run = True
+        
+    if middle.button("Rembrandt Lighting", use_container_width=True):
+        print("hello2")
+        run = True
+
+    if right.button("Back Lighting", use_container_width=True):
+        print("hello3")
+        run = True
+
+
     if run:
         cap = cv2.VideoCapture(0)
         stframe = st.empty()
