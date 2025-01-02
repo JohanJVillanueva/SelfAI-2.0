@@ -1,0 +1,119 @@
+import cv2
+import mediapipe as mp
+import streamlit as st
+import pyttsx3
+import time
+
+mp_drawing = mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
+
+def count_fingers(hand_landmarks):
+    finger_tips_ids = [4, 8, 12, 16, 20]
+    fingers = []
+
+    # Thumb
+    if hand_landmarks.landmark[finger_tips_ids[0]].x < hand_landmarks.landmark[finger_tips_ids[0] - 2].x:
+        fingers.append(1)
+    else:
+        fingers.append(0)
+
+    # Other four fingers
+    for id in range(1, 5):
+        if hand_landmarks.landmark[finger_tips_ids[id]].y < hand_landmarks.landmark[finger_tips_ids[id] - 2].y:
+            fingers.append(1)
+        else:
+            fingers.append(0)
+
+    return fingers.count(1)
+
+def text_to_speech(message):
+    engine = pyttsx3.init()
+    engine.say(message)
+    engine.runAndWait()
+
+def main():
+    st.title("Real-Time Hand Detection and Finger Counting Using MediaPipe")
+    
+    st.sidebar.title("Settings")
+    max_num_hands = st.sidebar.slider('Max number of hands:', 1, 4, 2, 1)
+    min_detection_confidence = st.sidebar.slider('Minimum detection confidence:', 0.1, 1.0, 0.5, 0.1)
+    
+    run = st.sidebar.button('Start Hand Tracking')
+    
+    if run:
+        cap = cv2.VideoCapture(0)
+        stframe = st.empty()
+        
+        with mp_hands.Hands(
+            max_num_hands=max_num_hands,
+            min_detection_confidence=min_detection_confidence) as hands:
+            
+            while cap.isOpened():
+                success, image = cap.read()
+                if not success:
+                    st.error("Failed to capture image from camera.")
+                    break
+                
+                # Flip the image horizontally for a later selfie-view display
+                image = cv2.flip(image, 1)
+                image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                
+                # Process the image and find hands
+                results = hands.process(image_rgb)
+                
+                # Draw the hand annotations on the image and count fingers
+                if results.multi_hand_landmarks:
+                    for hand_landmarks in results.multi_hand_landmarks:
+                        mp_drawing.draw_landmarks(
+                            image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                        
+                        # Count the number of raised fingers
+                        fingers_count = count_fingers(hand_landmarks)
+                        
+                        # Display the number of raised fingers and add text-to-speech
+                        if fingers_count in [1, 2, 3]:
+                            font_scale = 5 if fingers_count == 1 else 2
+                            cv2.putText(image, str(fingers_count), (100, 200), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), 10, cv2.LINE_AA)
+                            
+                            if fingers_count == 1:
+                                text_to_speech("Taking photo in 3 seconds")
+                                text_to_speech("Please look at the Lens")
+                                text_to_speech("3")
+                                text_to_speech("2")
+                                text_to_speech("1")
+                                text_to_speech("Photo Done")
+                                
+                            elif fingers_count == 2:
+                                text_to_speech("Taking photo in 5 seconds")
+                                text_to_speech("Please look at the Lens")
+                                text_to_speech("5")
+                                text_to_speech("4")
+                                text_to_speech("3")
+                                text_to_speech("2")
+                                text_to_speech("1")
+                                text_to_speech("Photo Done")
+                            elif fingers_count == 3:
+                                text_to_speech("Taking photo in 10 seconds")
+                                text_to_speech("Please look at the Lens")
+                                text_to_speech("10")
+                                text_to_speech("9")
+                                text_to_speech("8")
+                                text_to_speech("7")
+                                text_to_speech("6")
+                                text_to_speech("5")
+                                text_to_speech("4")
+                                text_to_speech("3")
+                                text_to_speech("2")
+                                text_to_speech("1")
+                                text_to_speech("Photo Done")
+                
+                stframe.image(image, channels='BGR')
+                
+                if cv2.waitKey(5) & 0xFF == 27:
+                    break
+        
+        cap.release()
+        cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
