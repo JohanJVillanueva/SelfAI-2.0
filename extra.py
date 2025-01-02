@@ -59,7 +59,7 @@ def is_five_fingers_open_right_hand(hand_landmarks, hand_label):
         hand_landmarks[12].y < hand_landmarks[10].y,  # Middle finger
         hand_landmarks[16].y < hand_landmarks[14].y,  # Ring finger
         hand_landmarks[20].y < hand_landmarks[18].y,  # Pinky
-        hand_landmarks[4].x < hand_landmarks[3].x  # Thumb on the left side
+        hand_landmarks[4].x < hand_landmarks[3].x  # Thumb on the left side (flipped for right hand)
     ]
     return all(fingers_open)
 
@@ -93,7 +93,7 @@ def main():
         stframe = st.empty()
 
         with mp_hands.Hands(
-            max_num_hands=2,
+            max_num_hands=1,
             min_detection_confidence=0.9,
             model_complexity=1) as hands:
 
@@ -103,7 +103,7 @@ def main():
                     st.error("Failed to capture image from camera.")
                     break
 
-                image = cv2.flip(image, 1)
+                image = cv2.flip(image, 2)
                 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 results = hands.process(image_rgb)
 
@@ -127,11 +127,12 @@ def main():
 
                             for i in range(3, 0, -1):
                                 text_to_speech(str(i))
-                                time.sleep(1)
+                                
 
                             pyautogui.click()
                             st.toast('Photo Done!', icon='📸')
                             text_to_speech("Photo Done")
+                            time.sleep(2)
                             image_placeholder.empty()
 
                         if is_five_fingers_open_right_hand(landmarks, hand_label):
@@ -142,11 +143,12 @@ def main():
 
                             for i in range(10, 0, -1):
                                 text_to_speech(str(i))
-                                time.sleep(1)
+                                
 
                             pyautogui.click()
                             st.toast('Photo Done!', icon='📸')
                             text_to_speech("Photo Done")
+                            time.sleep(2)
                             image_placeholder.empty()
 
                 stframe.image(image, channels='BGR')
