@@ -5,6 +5,10 @@ import pyttsx3
 import pyautogui
 import time
 import serial
+from streamlit_modal import Modal
+
+import streamlit.components.v1 as components
+
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -63,6 +67,8 @@ def is_five_fingers_open_right_hand(hand_landmarks, hand_label):
         hand_landmarks[4].x < hand_landmarks[3].x  # Thumb on the left side (flipped for right hand)
     ]
     return all(fingers_open)
+
+
 
 def main():
     #st.sidebar.title("Settings")
