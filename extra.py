@@ -64,29 +64,35 @@ def is_five_fingers_open_right_hand(hand_landmarks, hand_label):
     return all(fingers_open)
 
 def main():
-    st.sidebar.title("Settings")
-    max_num_hands = st.sidebar.slider('Max number of hands:', 1, 4, 2, 1)
-    min_detection_confidence = st.sidebar.slider('Minimum detection confidence:', 0.1, 1.0, 0.5, 0.1)
-
+    #st.sidebar.title("Settings")
+    #max_num_hands = st.sidebar.slider('Max number of hands:', 1, 4, 2, 1)
+    #min_detection_confidence = st.sidebar.slider('Minimum detection confidence:', 0.1, 1.0, 0.5, 0.1)
+    image_placeholder = st.empty()
     run = st.sidebar.button('Start Hand Tracking')
 
     left, middle, right = st.columns(3)
     if left.button("💡Double Bounce Lighting", use_container_width=True):
+        image_placeholder.image("doublebounce.png")
         print("hello1")
         text_to_speech("Setting up Double Bounce Lighting, Please wait for the lights to turn on")
+        image_placeholder.empty()
         run = True
 
     if middle.button("💡 Rembrandt Lighting", use_container_width=True):
+        image_placeholder.image("rembrandt.png")
         print("hello2")
         text_to_speech("Setting up Rembrandt Lighting, Please wait for the lights to turn on")
+        image_placeholder.empty()
         run = True
 
     if right.button("💡 Back Lighting", use_container_width=True):
+        image_placeholder.image("backlighting.png")
         print("hello3")
         text_to_speech("Setting up Back Lighting, Please wait for the lights to turn on")
+        image_placeholder.empty()
         run = True
 
-    image_placeholder = st.empty()
+    
 
     if run:
         cap = cv2.VideoCapture(0)
