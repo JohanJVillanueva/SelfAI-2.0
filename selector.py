@@ -7,7 +7,12 @@ from tkinter import PhotoImage  # To work with images
 import pyttsx3  # For text-to-speech functionality
 
 # Initialize the pyttsx3 engine
+
 engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+engine.say("Opening SelfAI")
+engine.runAndWait()
 
 # Function to speak the text
 def speak(text):
@@ -36,7 +41,7 @@ def open_script_1():
     open_hand_recognition(7)
 
     # Wait for 20 seconds
-    time.sleep(20)
+    time.sleep(30)
     # Press Ctrl+W to close the application
     pyautogui.hotkey('ctrl', 'w')
     # Announce the time is up
@@ -50,7 +55,7 @@ def open_script_2():
     open_hand_recognition(8)
 
     # Wait for 20 seconds
-    time.sleep(20)
+    time.sleep(30)
     # Press Ctrl+W to close the application
     pyautogui.hotkey('ctrl', 'w')
     # Announce the time is up
@@ -64,7 +69,7 @@ def open_script_3():
     open_hand_recognition(9)
 
     # Wait for 20 seconds
-    time.sleep(20)
+    time.sleep(30)
     # Press Ctrl+W to close the application
     pyautogui.hotkey('ctrl', 'w')
     # Announce the time is up

@@ -38,6 +38,8 @@ st.markdown(background_image, unsafe_allow_html=True)
 
 def text_to_speech(message):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[1].id)
     engine.say(message)
     engine.runAndWait()
 
