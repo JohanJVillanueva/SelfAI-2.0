@@ -85,7 +85,7 @@ def main():
         print("hello1")
         text_to_speech("Setting up Double Bounce Lighting, Please wait for the lights to turn on")
         # Initialize the serial connection
-        serialcomm = serial.Serial('COM12', 9600)
+        serialcomm = serial.Serial('COM10', 9600)
         serialcomm.timeout = 1
 
         try:
