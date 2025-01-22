@@ -35,9 +35,6 @@ SelfAI is a cutting-edge system designed to revolutionize the self-portrait expe
     * Minimized manual intervention for increased efficiency.
     * Optimized for both professional and casual users.
 
-**System Architecture**
-
-[Insert a high-level diagram of the system architecture, including key components such as:]
 
 * **Hardware:** 
     * Webcam 
@@ -47,13 +44,6 @@ SelfAI is a cutting-edge system designed to revolutionize the self-portrait expe
     * SelfAI core software (including AI algorithms, image processing, and user interface)
     * Communication protocols for device interoperability 
 
-**Installation and Usage**
-
-[Include detailed instructions on how to install and use the SelfAI system, including:]
-
-* **Hardware setup and connections**
-* **Software installation and configuration**
-* **User guide and tutorials**
 
 **Contributing**
 
@@ -69,6 +59,3 @@ We are actively working on expanding SelfAI's capabilities with the following fe
 * Support for virtual and augmented reality experiences.
 * Enhanced customization options for users.
 
-**Note:** This is a basic template. You should adapt it to include specific details about your project, such as the programming languages used, dependencies, and any other relevant information. 
-
-I hope this README provides a good starting point for your GitHub repository!
