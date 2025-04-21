@@ -32,3 +32,5 @@ time.sleep(1)  # Delay to ensure the date is entered
 
 # Press Enter 2 times
 pyautogui.press('enter')
+time.sleep(2)
+

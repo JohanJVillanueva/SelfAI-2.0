@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pinterest-style Grid with Timer and Lighting</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 100vh;
+      gap: 20px;
+    }
+
+    /* Photo Display on the Left */
+    .photo-display {
+      width: 40%;
+      height: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 20px;
+    }
+
+    .photo-display img {
+      max-width: 90%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    /* Image Grid in the Middle */
+    .image-grid {
+      width: 40%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      height: fit-content;
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+
+    .image-grid img {
+      width: 100%;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .image-grid img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Sidebar on the Right */
+    .sidebar {
+      width: 20%;
+      position: sticky;
+      top: 10px;
+      height: fit-content;
+      align-self: flex-start;
+    }
+
+    .sticky-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .timer-buttons .btn-small {
+      margin: 10px 10px 0 0;
+    }
+
+    .lighting-buttons .btn {
+      margin: 10px 10px 0 0;
+    }
+
+    .shutter-button {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #26a69a;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .shutter-button:hover {
+      background-color: #2bbbad;
+    }
+
+    .shutter-button i {
+      font-size: 36px;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .photo-display {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .image-grid {
+        width: 100%;
+      }
+
+      .sidebar {
+        width: 100%;
+        position: static;
+        top: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Left Photo Display -->
+  <div class="photo-display" id="photoDisplay">
+    <span id="photoTitle">Select a Photo</span>
+  </div>
+
+  <!-- Middle Image Grid -->
+  <div class="image-grid">
+    <img src="https://picsum.photos/id/1011/300/200" alt="img1">
+    <img src="https://picsum.photos/id/1025/300/200" alt="img2">
+    <img src="https://picsum.photos/id/1035/300/200" alt="img3">
+    <img src="https://picsum.photos/id/1049/300/200" alt="img4">
+    <img src="https://picsum.photos/id/1050/300/200" alt="img5">
+    <img src="https://picsum.photos/id/1060/300/200" alt="img6">
+    <img src="https://picsum.photos/id/1011/300/200" alt="img1">
+    <img src="https://picsum.photos/id/1025/300/200" alt="img2">
+    <img src="https://picsum.photos/id/1035/300/200" alt="img3">
+    <img src="https://picsum.photos/id/1049/300/200" alt="img4">
+    <img src="https://picsum.photos/id/1050/300/200" alt="img5">
+    <img src="https://picsum.photos/id/1060/300/200" alt="img6">
+  </div>
+
+  <!-- Right Sidebar -->
+  <div class="sidebar">
+    <div class="sticky-container">
+        <img src="logo.png" style="height: 20%;">
+      <!-- Timer Card -->
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">⏱ Timer</span>
+          <h4 id="timerDisplay">10:00</h4>
+          <div class="timer-buttons">
+            <a class="btn-small green" onclick="startTimer()">Start</a>
+            <a class="btn-small orange" onclick="pauseTimer()">Pause</a>
+            <a class="btn-small red" onclick="resetTimer()">Reset</a>
+        </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lighting Card -->
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">💡 Lighting</span>
+          <div class="lighting-buttons">
+            <a class="btn blue lighten-1">Backlighting</a>
+            <a class="btn purple lighten-1">Rembrandt</a>
+            <a class="btn teal lighten-1">Front Lighting</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shutter Card -->
+      <div class="card">
+        <div class="card-content center-align">
+          <span class="card-title">📸 Shutter</span>
+          <button class="shutter-button" onclick="triggerShutter()">
+            <i class="material-icons">camera_alt</i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal logic
+  const images = document.querySelectorAll('.image-grid img');
+  const photoDisplay = document.getElementById('photoDisplay');
+  const photoTitle = document.getElementById('photoTitle');
+
+  images.forEach(img => {
+    img.addEventListener('click', () => {
+      const newImageSrc = img.src;
+      const newImageAlt = img.alt;
+
+      const imageElement = document.createElement('img');
+      imageElement.src = newImageSrc;
+      photoTitle.style.display = 'none';  // Hide title when image is selected
+      photoDisplay.innerHTML = '';
+      photoDisplay.appendChild(imageElement);
+    });
+  });
+
+  // Timer logic
+  let timer;
+  let totalTime = 600;
+  let isRunning = false;
+
+  function updateDisplay() {
+    const minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
+    const seconds = (totalTime % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `${minutes}:${seconds}`;
+  }
+
+  function startTimer() {
+    if (!isRunning) {
+      isRunning = true;
+      timer = setInterval(() => {
+        if (totalTime > 0) {
+          totalTime--;
+          updateDisplay();
+        } else {
+          clearInterval(timer);
+        }
+      }, 1000);
+    }
+  }
+
+  function pauseTimer() {
+    clearInterval(timer);
+    isRunning = false;
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    totalTime = 600;
+    isRunning = false;
+    updateDisplay();
+  }
+
+  updateDisplay();
+
+  // Shutter function (calls backend or desktop app eventually)
+  function triggerShutter() {
+    alert("Shutter triggered!"); // Replace this with a real call to your Python script
+    // In your Python backend, use:
+    /*
+      hwnd = find_window_by_partial_title("Adobe")
+      if hwnd:
+          win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_F12, 0)
+          win32api.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_F12, 0)
+      else:
+          print("Adobe window not found")
+    */
+  }
+</script>
+
+</body>
+</html>
