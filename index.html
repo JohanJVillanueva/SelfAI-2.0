@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Photo Carousel</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Photo Carousel with Categories</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
   <style>
     body {
       background: #f0f0f0;
@@ -22,9 +22,8 @@
       gap: 20px;
     }
 
-    /* Photo Display on the Left */
     .photo-display {
-      width: 50%;
+      width: 40%;
       height: 90%;
       display: flex;
       align-items: center;
@@ -43,29 +42,56 @@
       border-radius: 12px;
     }
 
-    /* Image Grid in the Middle */
-    .image-grid {
+    .tabs-container {
       width: 50%;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 15px;
-      height: fit-content;
+      height: 90%;
       overflow-y: auto;
-      max-height: 100vh;
     }
 
-    .image-grid img {
+    .custom-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .custom-tabs button {
+      flex: 1;
+      padding: 10px;
+      background-color: #26a69a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .custom-tabs button.active {
+      background-color: #2bbbad;
+    }
+
+    .tab-content {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding-top: 10px;
+    }
+
+    .tab-content.active {
+      display: grid;
+    }
+
+    .tab-content img {
       width: 100%;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
       transition: transform 0.3s;
     }
 
-    .image-grid img:hover {
+    .tab-content img:hover {
       transform: scale(1.05);
     }
 
-    /* Sidebar on the Right */
     .sidebar {
       width: 20%;
       position: sticky;
@@ -115,27 +141,6 @@
       font-size: 36px;
       color: white;
     }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .photo-display {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-
-      .image-grid {
-        width: 100%;
-      }
-
-      .sidebar {
-        width: 100%;
-        position: static;
-        top: auto;
-      }
-    }
   </style>
 </head>
 <body>
@@ -146,60 +151,58 @@
     <span id="photoTitle">Select a Photo</span>
   </div>
 
-  <!-- Middle Image Grid -->
-  <div class="image-grid">
-    <img src="SamplePhotos/1.jpg">
-    <img src="SamplePhotos/2.jpg">
-    <img src="SamplePhotos/3.jpg">
-    <img src="SamplePhotos/4.jpg">
-    <img src="SamplePhotos/5.jpg">
-    <img src="SamplePhotos/6.jpg">
-    <img src="SamplePhotos/7.jpg">
-    <img src="SamplePhotos/8.jpg">
-    <img src="SamplePhotos/9.jpg">
-    <img src="SamplePhotos/10.jpg">
-    <img src="SamplePhotos/11.jpg">
-    <img src="SamplePhotos/12.jpg">
-    <img src="SamplePhotos/13.jpg">
-    <img src="SamplePhotos/14.jpg">
-    <img src="SamplePhotos/15.jpg">
-    <img src="SamplePhotos/16.jpg">
-    <img src="SamplePhotos/17.jpg">
-    <img src="SamplePhotos/18.jpg">
-    <img src="SamplePhotos/19.jpg">
-    <img src="SamplePhotos/20.jpg">
-    <img src="SamplePhotos/21.jpg">
-    <img src="SamplePhotos/22.jpg">
-    <img src="SamplePhotos/23.jpg">
-    <img src="SamplePhotos/24.jpg">
-    <img src="SamplePhotos/25.jpg">
-    <img src="SamplePhotos/26.jpg">
-    <img src="SamplePhotos/27.jpg">
-    <img src="SamplePhotos/28.jpg">
-    <img src="SamplePhotos/29.jpg">
-    <img src="SamplePhotos/30.jpg">
-    <img src="SamplePhotos/31.jpg">
-    <img src="SamplePhotos/32.jpg">
-    <img src="SamplePhotos/33.jpg">
-    <img src="SamplePhotos/34.jpg">
-    <img src="SamplePhotos/35.jpg">
-    <img src="SamplePhotos/36.jpg">
-    <img src="SamplePhotos/37.jpg">
-    <img src="SamplePhotos/38.jpg">
-    <img src="SamplePhotos/39.jpg">
-    <img src="SamplePhotos/40.jpg">
-    <img src="SamplePhotos/41.jpg">
-    <img src="SamplePhotos/42.jpg">
-    <img src="SamplePhotos/43.jpg">
+  <!-- Middle Tabs for Categories -->
+  <div class="tabs-container">
+    <div class="custom-tabs">
+      <button class="active" data-target="solo">Solo</button>
+      <button data-target="group2">2-3 Persons</button>
+      <button data-target="group">Group Shots</button>
+    </div>
 
+    <div id="solo" class="tab-content active">
+      <img src="SamplePhotos/1.jpg" />
+      <img src="SamplePhotos/2.jpg" />
+      <img src="SamplePhotos/3.jpg" />
+      <img src="SamplePhotos/4.jpg" />
+      <img src="SamplePhotos/5.jpg" />
+      <img src="SamplePhotos/6.jpg" />
+      <img src="SamplePhotos/7.jpg" />
+      <img src="SamplePhotos/8.jpg" />
+      <img src="SamplePhotos/9.jpg" />
+      <img src="SamplePhotos/10.jpg" />
+    </div>
 
+    <div id="group2" class="tab-content">
+      <img src="SamplePhotos/11.jpg" />
+      <img src="SamplePhotos/12.jpg" />
+      <img src="SamplePhotos/13.jpg" />
+      <img src="SamplePhotos/14.jpg" />
+      <img src="SamplePhotos/15.jpg" />
+      <img src="SamplePhotos/16.jpg" />
+      <img src="SamplePhotos/17.jpg" />
+      <img src="SamplePhotos/18.jpg" />
+      <img src="SamplePhotos/19.jpg" />
+      <img src="SamplePhotos/20.jpg" />
+    </div>
+
+    <div id="group" class="tab-content">
+      <img src="SamplePhotos/21.jpg" />
+      <img src="SamplePhotos/22.jpg" />
+      <img src="SamplePhotos/23.jpg" />
+      <img src="SamplePhotos/24.jpg" />
+      <img src="SamplePhotos/25.jpg" />
+      <img src="SamplePhotos/26.jpg" />
+      <img src="SamplePhotos/27.jpg" />
+      <img src="SamplePhotos/28.jpg" />
+      <img src="SamplePhotos/29.jpg" />
+      <img src="SamplePhotos/30.jpg" />
+    </div>
   </div>
 
   <!-- Right Sidebar -->
   <div class="sidebar">
     <div class="sticky-container">
-        <img src="logo.png" style="height: 20%;">
-      <!-- Timer Card -->
+      <img src="logo.png" style="height: 20%;" />
       <div class="card">
         <div class="card-content">
           <span class="card-title">⏱ Timer</span>
@@ -208,12 +211,9 @@
             <a class="btn-small green" onclick="startTimer()">Start</a>
             <a class="btn-small orange" onclick="pauseTimer()">Pause</a>
             <a class="btn-small red" onclick="resetTimer()">Reset</a>
-        </div>
           </div>
         </div>
       </div>
-
-      <!-- Lighting Card -->
       <div class="card">
         <div class="card-content">
           <span class="card-title">💡 Lighting</span>
@@ -224,8 +224,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Shutter Card -->
       <div class="card">
         <div class="card-content center-align">
           <span class="card-title">📸 Shutter</span>
@@ -234,27 +232,41 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
 <script>
-  // Modal logic
-  const images = document.querySelectorAll('.image-grid img');
+  // Tab switching logic
+  const tabButtons = document.querySelectorAll('.custom-tabs button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === button.dataset.target) {
+          content.classList.add('active');
+        }
+      });
+    });
+  });
+
+  // Photo click display logic
+  const images = document.querySelectorAll('.tab-content img');
   const photoDisplay = document.getElementById('photoDisplay');
   const photoTitle = document.getElementById('photoTitle');
 
-  images.forEach(img => {
+  images.forEach((img) => {
     img.addEventListener('click', () => {
-      const newImageSrc = img.src;
-      const newImageAlt = img.alt;
-
-      const imageElement = document.createElement('img');
-      imageElement.src = newImageSrc;
-      photoTitle.style.display = 'none';  // Hide title when image is selected
+      const newImg = document.createElement('img');
+      newImg.src = img.src;
+      photoTitle.style.display = 'none';
       photoDisplay.innerHTML = '';
-      photoDisplay.appendChild(imageElement);
+      photoDisplay.appendChild(newImg);
     });
   });
 
@@ -297,18 +309,8 @@
 
   updateDisplay();
 
-  // Shutter function (calls backend or desktop app eventually)
   function triggerShutter() {
-    alert("Shutter triggered!"); // Replace this with a real call to your Python script
-    // In your Python backend, use:
-    /*
-      hwnd = find_window_by_partial_title("Adobe")
-      if hwnd:
-          win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_F12, 0)
-          win32api.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_F12, 0)
-      else:
-          print("Adobe window not found")
-    */
+    alert("Shutter triggered!");
   }
 </script>
 
