@@ -16,8 +16,8 @@ for i in range(device_count):
     if info['maxInputChannels'] > 0:
         print(f"Device index {i}: {info['name']}")
 
-# Assuming you're using the first available microphone (you can change the index)
-mic_index = 0  # Change this index to the correct one from the list above
+# Change this index if needed
+mic_index = 0
 
 # Open the stream using the selected microphone
 stream = p.open(format=pyaudio.paInt16,
@@ -29,36 +29,29 @@ stream = p.open(format=pyaudio.paInt16,
 
 # Function to detect claps
 def detect_claps(rms, threshold=2000):
-    """Detect a single clap based on RMS threshold."""
-    if rms > threshold:
-        return True
-    return False
+    return rms > threshold
 
 # Variables to track clap detection
 clap_count = 0
-last_clap_time = time.time()
-
-# Adjust the duration for detecting the second clap (now set to 2 seconds)
-clap_duration = 2.0  # Time window between claps (seconds)
+last_clap_time = 0
+clap_duration = 2.0      # Time window between claps (seconds)
+clap_cooldown = 0.3      # Cooldown after a clap to avoid double detection
 
 try:
     while True:
-        data = stream.read(1024)
+        data = stream.read(1024, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
-        
-        # Detect a clap
-        if detect_claps(rms):
-            current_time = time.time()
-            
-            # Check if the second clap is within the time frame (now 2 seconds)
+        current_time = time.time()
+
+        if detect_claps(rms) and (current_time - last_clap_time > clap_cooldown):
             if current_time - last_clap_time < clap_duration:
                 clap_count += 1
                 if clap_count == 2:
                     print("Two claps detected! Clicking...")
-                    pyautogui.click()  # Trigger click on the screen
-                    clap_count = 0  # Reset clap count after clicking
+                    pyautogui.click()
+                    clap_count = 0
             else:
-                clap_count = 1  # Reset to 1 if the claps are too far apart
+                clap_count = 1
             last_clap_time = current_time
 
         max_n = 100
@@ -70,4 +63,4 @@ except KeyboardInterrupt:
     stream.stop_stream()
     stream.close()
     p.terminate()
-    print()
+    print("\nStream closed.")
