@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SelfAI Companion Application</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>"
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
+  <style>
+   body {
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 100vh;
+      gap: 20px;
+    }
+
+    .photo-display {
+      width: 40%;
+      height: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 20px;
+    }
+
+    .photo-display img {
+      max-width: 90%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .tabs-container {
+      width: 50%;
+      height: 90%;
+      overflow-y: auto;
+    }
+
+    .custom-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .custom-tabs button {
+      flex: 1;
+      padding: 10px;
+      background-color: #26a69a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .custom-tabs button.active {
+      background-color: #2bbbad;
+    }
+
+    .tab-content {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding-top: 10px;
+    }
+
+    .tab-content.active {
+      display: grid;
+    }
+
+    .tab-content img {
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .tab-content img:hover {
+      transform: scale(1.05);
+    }
+
+    .sidebar {
+      width: 20%;
+      position: sticky;
+      top: 10px;
+      height: fit-content;
+      align-self: flex-start;
+    }
+
+    .sticky-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .timer-buttons .btn-small {
+      margin: 10px 10px 0 0;
+    }
+
+    .lighting-buttons .btn {
+      margin: 10px 10px 0 0;
+    }
+
+    .shutter-button {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #26a69a;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .shutter-button:hover {
+      background-color: #2bbbad;
+    }
+
+    .shutter-button i {
+      font-size: 36px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Left Photo Display -->
+  <div class="photo-display" id="photoDisplay">
+    <span id="photoTitle">Select a Photo</span>
+  </div>
+
+  <!-- Middle Tabs for Categories -->
+  <div class="tabs-container">
+    <div class="custom-tabs">
+      <button class="active" data-target="solo">Solo</button>
+      <button data-target="group2">2-3 Persons</button>
+      <button data-target="group">Group Shots</button>
+    </div>
+
+    <div id="solo" class="tab-content active">
+      {% for i in range(1, 36) %}
+        <img src="{{ url_for('static', filename='Solo/Solo (' ~ i ~ ').jpg') }}" />
+      {% endfor %}
+    </div>
+
+    <div id="group2" class="tab-content">
+      {% for i in range(1, 28) %}
+        <img src="{{ url_for('static', filename='Two/Two (' ~ i ~ ').jpg') }}" />
+      {% endfor %}
+    </div>
+
+    <div id="group" class="tab-content">
+      {% for i in range(1, 23) %}
+        <img src="{{ url_for('static', filename='Group/Group (' ~ i ~ ').jpg') }}" />
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Right Sidebar -->
+  <div class="sidebar">
+    <div class="sticky-container">
+      <img src="{{ url_for('static', filename='logo.png') }}" style="height: 20%;" />
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">⏱ Timer</span>
+          <h4 id="timerDisplay">10:00</h4>
+          <div class="timer-buttons">
+            <a class="btn-small green" onclick="startTimer()">Start</a>
+            <a class="btn-small orange" onclick="pauseTimer()">Pause</a>
+            <a class="btn-small red" onclick="resetTimer()">Reset</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">💡 Lighting</span>
+          <div class="lighting-buttons">
+            <center>
+            <a class="btn blue lighten-1" onclick="sendLighting('backlighting')">Backlighting</a>
+            <a class="btn purple lighten-1" onclick="sendLighting('rembrandt')">Rembrandt</a>
+            <a class="btn teal lighten-1" onclick="sendLighting('front')">Front Lighting</a>
+          </center>
+          </div>
+        </div>
+      </div>
+      <!--
+      <div class="card">
+        <div class="card-content center-align">
+          <span class="card-title">📸 Shutter</span>
+          <button class="shutter-button" onclick="triggerShutter()">
+            <i class="material-icons">camera_alt</i>
+          </button>
+        </div>
+      </div>
+      -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab switching logic
+  const tabButtons = document.querySelectorAll('.custom-tabs button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === button.dataset.target) {
+          content.classList.add('active');
+        }
+      });
+    });
+  });
+
+  // Photo click display logic
+  const images = document.querySelectorAll('.tab-content img');
+  const photoDisplay = document.getElementById('photoDisplay');
+  const photoTitle = document.getElementById('photoTitle');
+
+  images.forEach((img) => {
+    img.addEventListener('click', () => {
+      const newImg = document.createElement('img');
+      newImg.src = img.src;
+      photoTitle.style.display = 'none';
+      photoDisplay.innerHTML = '';
+      photoDisplay.appendChild(newImg);
+    });
+  });
+
+  // Timer logic
+  let timer;
+  let totalTime = 600;
+  let isRunning = false;
+
+  function updateDisplay() {
+    const minutes = Math.floor(totalTime / 60).toString().padStart(2, '0');
+    const seconds = (totalTime % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `${minutes}:${seconds}`;
+  }
+
+  function startTimer() {
+    if (!isRunning) {
+      isRunning = true;
+      timer = setInterval(() => {
+        if (totalTime > 0) {
+          totalTime--;
+          updateDisplay();
+        } else {
+          clearInterval(timer);
+        }
+      }, 1000);
+    }
+  }
+
+  function pauseTimer() {
+    clearInterval(timer);
+    isRunning = false;
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    totalTime = 600;
+    isRunning = false;
+    updateDisplay();
+  }
+
+  updateDisplay();
+
+  function triggerShutter() {
+    fetch('/shutter', { method: 'POST' })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("Error: " + err));
+  }
+
+  function sendLighting(mode) {
+    fetch('/lighting', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode })
+    })
+    .then(res => res.text())
+    .then(msg => alert(msg))
+    .catch(err => alert("Error: " + err));
+  }
+</script>
+
+</body>
+</html>
