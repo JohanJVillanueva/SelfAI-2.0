@@ -111,9 +111,10 @@ def main():
                             image_placeholder.image("LOOK.png")
                             cv2.putText(image, "Peace Sign Detected", (50, 50),
                                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                            text_to_speech("Taking photo in 5 seconds")
+                            #text_to_speech("Taking photo in 5 seconds")
                             text_to_speech("5")
                             text_to_speech("4")
+                            text_to_speech("3")
 
                             hwnd = find_window_by_partial_title("Adobe")
                             if hwnd:
@@ -122,14 +123,14 @@ def main():
                             else:
                                 print("No window with 'Adobe' in the title found.")
 
-                            text_to_speech("3")
                             text_to_speech("2")
-                            text_to_speech("1")    
+                            text_to_speech("1")
+
 
                             pyautogui.click()
                             st.toast('Photo Done!', icon='📸')
             
-                            time.sleep(3)
+                            time.sleep(1)
                             image_placeholder.empty()
                             text_to_speech("Photo Done")
 
