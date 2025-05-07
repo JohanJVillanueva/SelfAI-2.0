@@ -128,7 +128,7 @@ def main():
 
                             pyautogui.click()
                             st.toast('Photo Done!', icon='📸')
-
+            
                             time.sleep(3)
                             image_placeholder.empty()
                             text_to_speech("Photo Done")
