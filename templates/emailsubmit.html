@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SelfAI Kiosk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+  <style>
+    html,body{margin:0;padding:0;font-family:Roboto, sans-serif;background:#f4f4f4}
+    .section{display:none}
+    .active-section{display:block}
+
+    /* ---- Shared Flex Container ---- */
+    .flex{display:flex;gap:20px}
+
+    /* ---- Session‑page specific ---- */
+    .session-container{width:85%;min-height:70vh;justify-content:space-between}
+    .photo-display{flex:0 0 40%;height:90%;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:20px}
+    .photo-display img{max-width:90%;max-height:80vh;object-fit:contain;border-radius:12px}
+    .tabs-container{flex:0 0 50%;height:90%;overflow-y:auto}
+    .custom-tabs{display:flex;gap:10px;margin-bottom:10px}
+    .custom-tabs button{flex:1;padding:10px;background:#26a69a;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;transition:.3s}
+    .custom-tabs button.active{background:#2bbbad}
+    .tab-content{display:none;grid-template-columns:repeat(3,1fr);gap:10px;padding-top:10px}
+    .tab-content.active{display:grid}
+    .tab-content img{width:100%;border-radius:10px;cursor:pointer;transition:transform .3s}
+    .tab-content img:hover{transform:scale(1.05)}
+    /*.sidebar { flex: 0 0 20%; position: sticky; top: 2px; height: fit-content; align-self: flex-start; margin: -10; padding: 0; }*/
+    .sidebar{flex:0 0 20%;position:sticky;top:2px;height:fit-content;align-self:flex-start}
+    .sticky-container{display:flex;flex-direction:column;gap:20px}
+    .card{border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+    .timer-buttons .btn-small{margin:10px 10px 0 0}
+    .lighting-buttons .btn{margin:10px 10px 0 0}
+    .shutter-button{width:100px;height:100px;border-radius:50%;background:#26a69a;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;margin:0 auto}
+    .shutter-button:hover{background:#2bbbad}
+    .shutter-button i{font-size:36px;color:#fff}
+
+    /* ---- Other ---- */
+    .fullscreen-buzzer { display: none; flex-direction: column; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; color: #fff; font-size: 3em; align-items: center; justify-content: center; z-index: 9999; text-align: center; padding: 20px; cursor: pointer; }
+
+    /*.fullscreen-buzzer{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;color:#fff;font-size:3em;align-items:center;justify-content:center;z-index:9999;text-align:center;padding:20px;cursor:pointer}*/
+    iframe{border:none}
+  </style>
+</head>
+<body>
+
+<!-- 1️⃣ Start Page -->
+<div id="start" class="section active-section center-align" style="padding-top:10vh">
+  <img src="static/logonew.png" style="height:10%;max-width:100%;object-fit:contain" />
+  <h3>Welcome to <strong>SelfAI</strong></h3>
+  <h6>SelfAI is a cutting-edge system designed to revolutionize the self-portrait experience. <br> By seamlessly integrating artificial intelligence technologies, SelfAI streamlines studio operations, enhances image quality, and <br> provides an efficient and adaptable workflow for users.</h6>
+  <button class="btn" onclick="startVideoGuide()">▶️ Watch Video Guide</button>
+  <button class="btn grey" onclick="goToSection('form')">⏭ Skip Guide</button>
+</div>
+
+<!-- 2️⃣ Video Guide Page -->
+<div id="video" class="section center-align" style="padding-top:5vh">
+  <video id="guideVideo" width="50%" controls>
+    <source src="/static/guide.mp4" type="video/mp4" width="20%">
+    Your browser does not support the video tag.
+  </video>
+  <br>
+  <button class="btn" onclick="goToSection('form')">⏭ Continue</button>
+</div>
+
+<!-- 3️⃣ Google Form Page -->
+<div id="form" class="section" style="padding:20px">
+  <h5 class="center-align">Step 1 – Fill in your details</h5>
+  <iframe id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSdL7hvJmleUDjOpS1Z3Q3mNjXgkZad--yyfPnmEsl91MBiltg/viewform?embedded=true" width="100%" height="680"></iframe>
+  <div class="center-align" style="margin-top:15px">
+    <button id="btnFormNext" class="btn" onclick="goToSection('session')">Skip ⏩</button>
+    <button id="btnFormNext" class="btn" onclick="goToSection('session')" disabled>Proceed ➡️</button>
+  </div>
+</div>
+
+<!-- 4️⃣ Session Page (Timer + Pose Guidance) -->
+<div id="session" class="section" style="padding:20px">
+  <h5 class="center-align">Step 2 – Pose & Shoot</h5>
+
+  <div class="session-container flex">
+    <!-- Left Photo Display -->
+    <div class="photo-display" id="photoDisplay">
+      <span id="photoTitle">Select a Pose</span>
+    </div>
+
+    <!-- Middle Tabs for Poses -->
+    <div class="tabs-container">
+      <div class="custom-tabs">
+        <button class="active" data-target="solo">Solo</button>
+        <button data-target="group2">2‑3 Persons</button>
+        <button data-target="group">Group Shots</button>
+      </div>
+      <div id="solo" class="tab-content active">
+        {% for i in range(1, 36) %}
+          <img src="{{ url_for('static', filename='Solo/Solo (' ~ i ~ ').jpg') }}" />
+        {% endfor %}
+      </div>
+      <div id="group2" class="tab-content">
+        {% for i in range(1, 28) %}
+          <img src="{{ url_for('static', filename='Two/Two (' ~ i ~ ').jpg') }}" />
+        {% endfor %}
+      </div>
+      <div id="group" class="tab-content">
+      {% for i in range(1, 23) %}
+        <img src="{{ url_for('static', filename='Group/Group (' ~ i ~ ').jpg') }}" />
+      {% endfor %}
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="sidebar">
+      <div class="sticky-container">
+        <!-- Timer Card -->
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">⏱ Timer</span>
+            <h4 id="timerDisplay">10:00</h4>
+            <div class="timer-buttons">
+              <a class="btn-small green" onclick="startTimer()">Start</a>
+              <a class="btn-small orange" onclick="pauseTimer()">Pause</a>
+              <a class="btn-small red" onclick="resetTimer()">Reset</a>
+            </div>
+            <div style="margin-top:10px">
+              <select id="timeSelect" class="browser-default">
+                <option value="30">30 seconds</option>
+                <option value="60">1 Minute</option>
+                <option value="120">2 Minutes</option>
+                <option value="300">5 Minutes</option>
+                <option value="600" selected>10 Minutes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Lighting Card -->
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">💡 Lighting</span>
+            <div class="lighting-buttons center-align">
+              <a class="btn blue lighten-1" onclick="sendLighting('backlighting')">Backlighting</a>
+              <a class="btn purple lighten-1" onclick="sendLighting('rembrandt')">Rembrandt</a>
+              <a class="btn teal lighten-1" onclick="sendLighting('front')">Front Lighting</a>
+            </div>
+          </div>
+        </div>
+        <!-- <img src="static/logonew.png" style="height:10%;max-width:100%;object-fit:contain" /> -->
+        <!-- Optional Shutter Card -->
+        <!--
+        <div class="card">
+          <div class="card-content center-align">
+            <span class="card-title">📸 Shutter</span>
+            <button class="shutter-button" onclick="triggerShutter()">
+              <i class="material-icons">camera_alt</i>
+            </button>
+          </div>
+        </div>
+        -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5️⃣ Final Page -->
+<div id="done" class="section center-align" style="padding-top:10vh">
+  <h4>Your photos are ready!</h4>
+  <p>Scan the QR code to retrieve your images.</p>
+  <img src="static/qr.png" alt="QR Code" style="width:280px">
+  <br><br>
+  <button class="btn" onclick="restartFlow()">🔁 Start Again</button>
+</div>
+
+<!-- ⏰ Buzzer Overlay -->
+<div id="buzzer" class="fullscreen-buzzer" onclick="goToSection('done')">
+  <h1> ⏰ TIME'S UP! <br> </h1>
+  <h6> All photos will be uploaded through this QR code, after the event. Thank you for using SelfAI!</h6>
+  <img src="/static/qrcode.png" style="width: 20%; height: auto;" >
+  <p><br></p>
+  <button onclick="location.reload();">Refresh Page</button>
+  <audio id="buzzerSound" src="/static/buzzer.mp3" preload="auto"></audio>
+</div>
+<script>
+  
+  /* ---------- Navigation ---------- */
+  function goToSection(id){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-section'));
+    document.getElementById(id).classList.add('active-section');
+  }
+  function startVideoGuide(){
+    goToSection('video');
+    document.getElementById('guideVideo').play();
+  }
+  function restartFlow(){
+    clearInterval(timer);
+    isRunning=false;
+    totalTime=parseInt(timeSelect.value);
+    updateDisplay();
+    document.getElementById('buzzer').style.display='none';
+    btnFormNext.disabled=true;
+    goToSection('start');
+  }
+
+  /* ---------- Form submission detection ---------- */
+  const googleForm=document.getElementById('googleForm');
+  const btnFormNext=document.getElementById('btnFormNext');
+  let formLoadCount=0;
+  googleForm.addEventListener('load',()=>{
+    formLoadCount++;
+    if(formLoadCount>=2){btnFormNext.disabled=false;}
+  });
+
+  /* ---------- Timer Logic ---------- */
+  const timeSelect=document.getElementById('timeSelect');
+  const timerDisplay=document.getElementById('timerDisplay');
+  let timer;let totalTime=parseInt(timeSelect.value);let isRunning=false;
+  function updateDisplay(){const m=String(Math.floor(totalTime/60)).padStart(2,'0');const s=String(totalTime%60).padStart(2,'0');timerDisplay.textContent=`${m}:${s}`;}
+  function startTimer(){if(isRunning) return;isRunning=true;timer=setInterval(()=>{if(totalTime>0){totalTime--;updateDisplay();}else{clearInterval(timer);document.getElementById('buzzer').style.display='flex';document.getElementById('buzzerSound').play();}},1000);} 
+  function pauseTimer(){clearInterval(timer);isRunning=false;}
+  function resetTimer(){pauseTimer();totalTime=parseInt(timeSelect.value);updateDisplay();}
+  timeSelect.addEventListener('change',resetTimer);updateDisplay();
+
+  /* ---------- Pose Gallery Logic ---------- */
+  const tabButtons=document.querySelectorAll('.custom-tabs button');
+  const tabContents=document.querySelectorAll('.tab-content');
+  tabButtons.forEach(btn=>btn.addEventListener('click',()=>{
+    tabButtons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    tabContents.forEach(c=>c.classList.remove('active'));
+    document.getElementById(btn.dataset.target).classList.add('active');
+  }));
+  document.querySelectorAll('.tab-content img').forEach(img=>img.addEventListener('click',()=>{
+    const preview=new Image();preview.src=img.src;const display=document.getElementById('photoDisplay');display.innerHTML='';display.appendChild(preview);
+  }));
+
+  /* ---------- Arduino Communication ---------- */
+  function triggerShutter(){
+    fetch('/shutter',{method:'POST'}).then(res=>res.text()).catch(err=>alert('Error:'+err));
+  }
+  function sendLighting(mode){
+    fetch('/lighting',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode})})
+      .then(res=>res.text()).catch(err=>alert('Error:'+err));
+  }
+</script>
+
+</body>
+</html>

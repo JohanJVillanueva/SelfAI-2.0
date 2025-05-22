@@ -20,7 +20,8 @@ def read_serial_data():
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # Your HTML should be inside a 'templates' folder
+    return render_template('emailsubmit.html')
+    #return render_template('index.html')  # Your HTML should be inside a 'templates' folder
 
 @app.route('/shutter', methods=['POST'])
 def trigger_shutter():
